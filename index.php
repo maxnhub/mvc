@@ -1,17 +1,20 @@
 <?php
 
-//ini_set('display_errors', 'on');
-//ini_set('error_reporting', E_NOTICE | E_ALL);
-
 require_once 'init.php';
 
 //Код для неавторизованного пользователя
-if(isUserAuthorized()) {
+if (!isUserAuthorized()) {
+    // user not authorized
     header('Location: registerForm.php');
     die;
-};
+}
 
-//Код для авторизованного пользователя
+echo 'Пользователь авторизован<br>';
+// User authorized
+echo 'You ID is = ' . $_SESSION['user_id'];
+
+if (!empty($_GET['authorized'])) {
+    echo 'You just successfully authorized';
+}
 ?>
 
-<h1>fhghg</h1>
