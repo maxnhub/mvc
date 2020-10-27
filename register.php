@@ -16,8 +16,11 @@ if (getUserByLogin($name)) {
     die;
 }
 
-$query = "INSERT INTO users (`name`, `password`, email) VALUES ('$name', '$password', 'default@gmail.com');";
-$ret = getDbConnection()->query($query);
+$query = "INSERT INTO users (`name`, `password`, email) VALUES (:userName, :userPass, 'default@gmail.com');";
+//$ret = getDbConnection()->query($query);
+
+$prepared = $DB->prepare($query);
+$ret = $prepared->execute(['userName' => $name, 'userPass' => $password]);
 
 if ($ret) {
     echo 'User created';
