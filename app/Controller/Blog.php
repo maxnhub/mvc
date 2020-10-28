@@ -1,3 +1,4 @@
+
 <?php
 namespace App\Controller;
 
@@ -7,7 +8,12 @@ class Blog extends AbstractController
 {
     function indexAction()
     {
-        echo __METHOD__;
-    }
+        if (!$this->user) {
+            $this->redirect('/user/register');
+        }
 
+        return $this->view->render('Blog/index.phtml', [
+            'user' => $this->user
+        ]);
+    }
 }
