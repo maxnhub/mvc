@@ -12,6 +12,16 @@ class User extends AbstractModel
     private $createdAt;
     private $password;
 
+    public function __construct($data = [])
+    {
+        if($data){
+            $this->id = $data['id'];
+            $this->name = $data['name'];
+            $this->email = $data['email'];
+            $this->createdAt = $data['created_at'];
+            $this->password = $data['password'];
+        }
+    }
 
     public function getName(): string
     {
@@ -63,7 +73,7 @@ class User extends AbstractModel
      */
     public function getCreatedAt(): string
     {
-        return $this->password;
+        return $this->createdAt;
     }
 
     /**
@@ -109,6 +119,21 @@ class User extends AbstractModel
 
         return $id;
     }
+
+    public static function getById(int $id): ?self
+    {
+        $db = Db::getInstance();
+        $select = "SELECT * FROM users WHERE id = $id";
+        $data = $db->fetchOne($select, __METHOD__);
+
+        if(!$data) {
+            return null;
+        }
+
+        return new self($data);
+
+    }
+
 
     public static function getPasswordHash(string $password): string
     {

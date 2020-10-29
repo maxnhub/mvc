@@ -1,0 +1,13 @@
+<?php
+/** @var \App\Model\User $user */
+$user = $this->user;
+
+?>
+
+<?php //if(!$user): ?>
+    <h1>Имя: <?= $user->getName(); ?></h1>
+    <p>Почта: <?= $user->getEmail(); ?></p>
+    <p>Дата регистрации: <?= $user->getCreatedAt(); ?></p>
+<?php //else: ?>
+<!--    <b>Пользователь не найден</b>-->
+<?php //endif; ?>

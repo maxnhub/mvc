@@ -1,7 +1,7 @@
 <?php
 namespace Base;
 
-include 'config.php';
+include_once 'config.php';
 
 class Db
 {
@@ -29,10 +29,10 @@ class Db
 
     private function getConnection()
     {
-        $host = DB_HOST;
-        $dbName = DB_NAME;
-        $dbUser = DB_USER;
-        $dbPassword = DB_PASSWORD;
+        $host = HOST;
+        $dbName = DBNAME;
+        $dbUser = DBUSER;
+        $dbPassword = DBPASSWORD;
 
         if (!$this->pdo) {
             $this->pdo = new \PDO(

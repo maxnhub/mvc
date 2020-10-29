@@ -29,4 +29,11 @@ class User extends AbstractController
         ]);
     }
 
+    public function profileAction()
+    {
+        return $this->view->render('User/profile.phtml', [
+            'user' => UserModel::getById((int) $_GET['id'])
+        ]);
+    }
+
 }
