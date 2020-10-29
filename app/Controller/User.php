@@ -14,16 +14,17 @@ class User extends AbstractController
             $password = $_POST['password'];
             $user = UserModel::getByName($name);
             if(!$user) {
-
+                $this->view->assign('error', 'Неверный логин и пароль');
             }
 
-            if($user->getPassword() == UserModel::getPasswordHash($password)) {
-
+            if($user) {
+                if($user->getPassword() == UserModel::getPasswordHash($password)) {
+                    $this->view->assign('error', 'Неверный логин и пароль');
+                } else {
+                    $_SESSION['id'] = $user->getId();
+                    $this->redirect('/blog/index');
+                }
             }
-
-            $_SESSION['id'] = $user->getId();
-
-            $this->redirect('/blog/index');
         }
 
         return $this->view->render('User/register.phtml', [
@@ -36,15 +37,43 @@ class User extends AbstractController
         $names = ['Aglaya', "Zulfia", 'Azamat', 'Johnny', 'Sindbad', 'Alibaba', 'Ratatui', 'VolanDeMort'];
 
         $name = trim($_POST['name']);
-        $email = 'doh@springfield.com';
-        $password = 'donuts';
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        $success = true;
 
-        $user = new UserModel();
-        $user->setName($name)->setEmail($email)->setPassword(UserModel::getPasswordHash($password));
+        if(isset($_POST['name'])) {
+            if(!$name) {
+                $this->view->assign('error', 'Поле с именем не может быть пустым');
+                $success = false;
+            }
 
-        $user->save();
+            if(!$password) {
+                $this->view->assign('error', 'Поле с паролем не может быть пустым');
+                $success = false;
+            }
 
-        $this->redirect('/blog/index');
+            $user = UserModel::getByName($name);
+            if ($user) {
+                $this->view->assign('error', 'Пользователь с таким именем уже существует');
+                $success = false;
+            }
+
+            if($success) {
+                $user = new UserModel();
+                $user->setName($name)->setEmail($email)->setPassword(UserModel::getPasswordHash($password));
+
+                $user->save();
+
+                $_SESSION['id'] = $user->getId();
+                $this->setUser($user);
+
+                $this->redirect('/blog/index');
+            }
+        }
+
+        return $this->view->render('User/register.phtml', [
+            'user' => UserModel::getById((int) $_GET['id'])
+        ]);
     }
 
     public function profileAction()
@@ -52,6 +81,14 @@ class User extends AbstractController
         return $this->view->render('User/profile.phtml', [
             'user' => UserModel::getById((int) $_GET['id'])
         ]);
+    }
+
+    public function logoutAction()
+    {
+        session_destroy();
+
+        $this->redirect('/user/login');
+
     }
 
 }

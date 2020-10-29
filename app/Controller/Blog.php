@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\User as UserModel;
 use Base\AbstractController;
 
 class Blog extends AbstractController
@@ -10,7 +11,14 @@ class Blog extends AbstractController
         if(!$this->user) {
             $this->redirect('/user/register');
         }
-        echo __METHOD__;
+
+//        $message = new Message();
+//        $message->setUserId($this->user->getId());
+
+        return $this->view->render('Blog/index.phtml', [
+            'user' => $this->user
+        ]);
+
     }
 
 }

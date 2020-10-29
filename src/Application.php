@@ -29,6 +29,7 @@ class Application
 
             $view = new View();
             $this->controller->setView($view);
+            $this->initUser();
 
             $content = $this->controller->{$this->actionName}();
 
