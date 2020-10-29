@@ -21,6 +21,8 @@ class Application
     public function run()
     {
         try {
+            session_start();
+
             $this->addRoutes();
             $this->initController();
             $this->initAction();
@@ -37,6 +39,15 @@ class Application
             die;
         } catch (RouteException $e) {
             header("HTTP/1.0 404 Not Found");
+        }
+    }
+
+    private function initUser()
+    {
+        $id = $_SESSION['id'] ?? null;
+        $user = \App\Model\User::getById($id);
+        if($id){
+            $this->controller->setUser($user);
         }
     }
 
