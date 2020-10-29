@@ -24,33 +24,6 @@ class Route
 
             $this->processed = true;
         }
-
-
-//        switch($parts['path']) {
-//            case '/html/user/login':
-//
-//                $controller = new \App\Controller\User();
-//                $controller->loginAction();
-//                break;
-//
-//            case '/html/user/register':
-//
-//                $controller = new \App\Controller\User();
-//                $controller->registerAction();
-//                break;
-//
-//            case '/html/blog':
-//            case '/html/blog/index':
-//
-//                $controller = new \App\Controller\Blog();
-//                $controller->indexAction();
-//                break;
-//
-//            default:
-//
-//                header('HTTP/1.0 404 Not Found');
-//                break;
-//        }
     }
 
     public function addRoute($path, $controllerName, $actionName)
