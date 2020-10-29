@@ -1,6 +1,8 @@
 <?php
 namespace Base;
 
+include 'config.php';
+
 class Db
 {
     /** @var \PDO */

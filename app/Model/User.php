@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use Base\AbstractModel;
+use Base\Db;
 
 class User extends AbstractModel
 {
@@ -97,7 +98,7 @@ class User extends AbstractModel
         $insert = "INSERT INTO users (`name`, `email`, `password`) VALUES (
             :name, :email, :password
         )";
-        $db->exec($insert, __METHOD, [
+        $db->exec($insert, __METHOD__, [
             ':name' => $this->name,
             ':email' => $this->email,
             ':password' => $this->password
