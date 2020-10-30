@@ -1,17 +1,31 @@
 Регистрация:
 <form action="/user/register" method="post">
-    Имя: <input type="text" name="name"> <br>
-    Пароль: <input type="password" name="password"> <br>
-    <input type="submit" value="Зарегистрироваться">
+    <div class="form__input">
+        Login: <input type="text" value="" name="name">
+    </div>
+    <div class="form__input">
+        Email: <input type="text" value="" name="email">
+    </div>
+    <div class="form__input">
+        Password: <input type="text" value="" name="password" pattern="[A-Za-zА-Яа-яЁё-0-9]{4,}">
+    </div>
+    <input type="submit" value="Register">
 </form>
 <br>
 <br>
 
 Войти
 <form action="/user/login" method="post">
-    Имя: <input type="text" name="name"> <br>
-    Пароль: <input type="password" name="password"> <br>
-    <input type="submit" value="Войти">
+<!--    <div class="form__input">-->
+        Login: <input type="text" value="" name="name">
+<!--    </div>-->
+<!--    <div class="form__input">-->
+        Password: <input type="password" value="" name="password" ">
+<!--    </div>-->
+<!--    <div class="form__input">pattern="[A-Za-zА-Яа-яЁё-0-9]{4,}-->
+<!--        Confirm password: <input type="password" value="" name="password_2" pattern="[A-Za-zА-Яа-яЁё-0-9]{4,}">-->
+<!--    </div>-->
+    <input type="submit" value="Log in">
 </form>
 
 <br>

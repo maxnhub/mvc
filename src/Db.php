@@ -70,6 +70,7 @@ class Db
 
     public function fetchOne(string $query, $_method, array $params = [])
     {
+
         $t = microtime(true);
         $prepared = $this->getConnection()->prepare($query);
 

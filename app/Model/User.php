@@ -11,6 +11,7 @@ class User extends AbstractModel
     private $email;
     private $createdAt;
     private $password;
+    private $password2;
 
     public function __construct($data = [])
     {
@@ -20,7 +21,31 @@ class User extends AbstractModel
             $this->email = $data['email'];
             $this->createdAt = $data['created_at'];
             $this->password = $data['password'];
+            $this->password2 = $data['password_2'];
         }
+    }
+
+    public static function getByIds(array $userIds)
+    {
+        $db = Db::getInstance();
+        $idsString = implode(',', $userIds);
+        $data = $db->fetchAll(
+            "SELECT * FROM users LIMIT id IN($idsString)",
+            __METHOD__
+        );
+
+        if(!$data) {
+            return [];
+        }
+
+        $users = [];
+        foreach($data as $elem) {
+            $user = new self($elem);
+            $user->id = $elem['id'];
+            $users[$user->id] = $user;
+        }
+
+        return $users;
     }
 
     public function getName(): string
@@ -37,7 +62,7 @@ class User extends AbstractModel
     /**
      * @return mixed
      */
-    public function getId(int $id)
+    public function getId()
     {
         return $this->id;
     }
@@ -65,6 +90,23 @@ class User extends AbstractModel
     public function setPassword($password): self
     {
         $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword2()
+    {
+        return $this->password2;
+    }
+
+    /**
+     * @param mixed $password2
+     */
+    public function setPassword2($password2): self
+    {
+        $this->password2 = $password2;
         return $this;
     }
 
@@ -120,26 +162,15 @@ class User extends AbstractModel
         return $id;
     }
 
-    public static function getById(int $id): ?self
+    public static function getById($id): ?self
     {
-        $db = Db::getInstance();
-        $select = "SELECT * FROM users WHERE id = $id";
-        $data = $db->fetchOne($select, __METHOD__);
-
-        if(!$data) {
+        if($id < 1) {
             return null;
         }
-
-        return new self($data);
-
-    }
-
-    public static function getByName(string $name): ?self
-    {
         $db = Db::getInstance();
-        $select = "SELECT * FROM users WHERE `name` = :name";
+        $select = "SELECT * FROM users WHERE id = :id";
         $data = $db->fetchOne($select, __METHOD__, [
-            ':name' => $name
+            ':id' => $id
         ]);
 
         if(!$data) {
@@ -150,10 +181,74 @@ class User extends AbstractModel
 
     }
 
+    public static function getList(int $limit = 10, int $offset = 0): array
+    {
+        $db = Db::getInstance();
+        $data = $db->fetchAll(
+            "SELECT * FROM users LIMIT $limit OFFSET $offset",
+            __METHOD__
+        );
+
+        if(!$data) {
+            return [];
+        }
+
+        $users = [];
+        foreach($data as $elem) {
+            $user = new self($elem);
+            $user->id = $elem['id'];
+            $users[] = $user;
+        }
+
+        return $users;
+    }
+
+    public static function getByName(string $name): ?self
+    {
+
+        $db = Db::getInstance();
+        $select = "SELECT * FROM users WHERE `name` = :name";
+        $data = $db->fetchOne($select, __METHOD__, [
+            ':name' => $name
+        ]);
+
+        if(empty($data['id'])) {
+            return null;
+        }
+
+        return new self($data);
+
+    }
+
+    public function login(string $name, string $password): bool
+    {
+        $db = Db::getInstance();
+        $select = "SELECT * FROM users WHERE `name` = :name AND `password` = :password";
+        $data = $db->fetchOne($select, __METHOD__, [
+            ':name' => $name,
+            ':password' => $password
+        ]);
+
+        if(empty($data['id'])) {
+            return false;
+        }
+
+        return true;
+
+    }
+
 
     public static function getPasswordHash(string $password): string
     {
         return sha1($password . 'gst4ff,weg.%ehf#fd');
     }
 
+    public static function getPasswordHashConfirm(string $password2): string
+    {
+        return sha1($password2 . 'gst4ff,weg.%ehf#fd');
+    }
+
 }
+
+// static
+// Db переписать на getDb
