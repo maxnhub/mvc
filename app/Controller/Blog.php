@@ -9,24 +9,25 @@ class Blog extends AbstractController
 {
     function indexAction()
     {
-        if(!$this->getUserId()) {
+        if(!$this->getUser()) {
             $this->redirect('/user/register');
         }
         $messages = MessageModel::getList();
         if($messages) {
             $userIds = array_map(function(MessageModel $message) {
-                return $message->getUserId();
+                return $message->getAuthorId();
             }, $messages);
             $users = UserModel::getByIds($userIds);
             array_walk($messages, function(MessageModel $message) use ($users){
-                if(isset($users[$message->getUserId()])) {
-                    $message->setAuthor($users[$message->getUserId()]);
+                if(isset($users[$message->getAuthorId()])) {
+                    $message->setAuthor($users[$message->getAuthorId()]);
                 }
 
             });
         }
         return $this->view->render('Blog/index.phtml', [
             'users' => $users,
+            'user' => $this->user,
             'messages' => $messages
         ]);
 
@@ -34,7 +35,7 @@ class Blog extends AbstractController
 
     public function addMessage()
     {
-        if(!$this->getUserId()){
+        if(!$this->getUser()){
             $this->redirect('/user/register');
         }
 
@@ -62,9 +63,4 @@ class Blog extends AbstractController
     {
 
     }
-
-    private function getUserId()
-    {
-    }
-
 }

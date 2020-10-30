@@ -27,6 +27,13 @@ class Message
         }
     }
 
+    public static function deleteMessage(int $messageId)
+    {
+        $db = Db::getInstance();
+        $query = "DELETE FROM messages WHERE id = $messageId";
+        return $db->exec($query, __METHOD__);
+    }
+
     public function save()
     {
         $db = Db::getInstance();
@@ -55,14 +62,35 @@ class Message
             return [];
         }
 
-        $posts = [];
+        $messages = [];
         foreach($data as $elem) {
-            $post = new self($elem);
-            $post->id = $elem['id'];
-            $posts[] = $post;
+            $message = new self($elem);
+            $message->id = $elem['id'];
+            $messages[] = $message;
         }
 
-        return $posts;
+        return $messages;
+    }
+
+    public static function getUserMessages(int $userId, int $limit): array
+    {
+        $db = Db::getInstance();
+        $data = $db->fetchAll(
+            "SELECT * fROM messages WHERE user_id = $userId LIMIT $limit",
+            __METHOD__
+        );
+        if (!$data) {
+            return [];
+        }
+
+        $messages = [];
+        foreach ($data as $elem) {
+            $message = new self($elem);
+            $message->id = $elem['id'];
+            $messages[] = $message;
+        }
+
+        return $messages;
     }
 
     /**
@@ -76,7 +104,7 @@ class Message
     /**
      * @return string
      */
-    public function getTextMessage(): string
+    public function getText(): string
     {
         return $this->message;
     }
@@ -84,7 +112,7 @@ class Message
     /**
      * @return mixed
      */
-    public function getUserId()
+    public function getAuthorId()
     {
         return $this->userId;
     }
@@ -136,5 +164,14 @@ class Message
         return $this->image;
     }
 
-
+    public function getData()
+    {
+        return [
+            'id' => $this->id,
+            'author_id' => $this->authorId,
+            'text' => $this->text,
+            'created_at' => $this->createdAt,
+            'image' => $this->image
+        ];
+    }
 }

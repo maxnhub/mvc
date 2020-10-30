@@ -11,7 +11,6 @@ class User extends AbstractModel
     private $email;
     private $createdAt;
     private $password;
-    private $password2;
 
     public function __construct($data = [])
     {
@@ -21,8 +20,25 @@ class User extends AbstractModel
             $this->email = $data['email'];
             $this->createdAt = $data['created_at'];
             $this->password = $data['password'];
-            $this->password2 = $data['password_2'];
+
         }
+    }
+
+    public static function getByEmail(string $email)
+    {
+        $db = Db::getInstance();
+        $data = $db->fetchOne(
+            "SELECT * fROM users WHERE email = :email",
+            __METHOD__,
+            [':email' => $email]
+        );
+        if (!$data) {
+            return null;
+        }
+
+        $user = new self($data);
+        $user->id = $data['id'];
+        return $user;
     }
 
     public static function getByIds(array $userIds)
@@ -150,16 +166,15 @@ class User extends AbstractModel
         $insert = "INSERT INTO users (`name`, `email`, `password`) VALUES (
             :name, :email, :password
         )";
-        $db->exec($insert, __METHOD__, [
+        $res = $db->exec($insert, __METHOD__, [
             ':name' => $this->name,
             ':email' => $this->email,
             ':password' => $this->password
         ]);
 
-        $id = $db->lastInsertId();
-        $this->id = $id;
+        $this->id = $db->lastInsertId();
 
-        return $id;
+        return $res;
     }
 
     public static function getById($id): ?self
@@ -243,12 +258,9 @@ class User extends AbstractModel
         return sha1($password . 'gst4ff,weg.%ehf#fd');
     }
 
-    public static function getPasswordHashConfirm(string $password2): string
+    public function isAdmin(): bool
     {
-        return sha1($password2 . 'gst4ff,weg.%ehf#fd');
+        return in_array($this->id, ADMIN_IDS);
     }
 
 }
-
-// static
-// Db переписать на getDb

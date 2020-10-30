@@ -11,7 +11,7 @@
             <?php else: ?>
                 <p class="author">Этот пользователь больше не существует</p>
             <?php endif; ?>
-            <p class="text"><?= $message->getCreatedAt(); ?> <?= htmlspecialchars(nl2br($message->getTextMessage())); ?></p>
+            <p class="text"><?= $message->getCreatedAt(); ?> <?= htmlspecialchars(nl2br($message->getText())); ?></p>
             <?php if($message->getImage()): ?>
                 <div><img src="/images/<?= $message->getImage(); ?>"</div>
             <?php endif; ?>
