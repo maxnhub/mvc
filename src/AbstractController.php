@@ -21,8 +21,7 @@ abstract class AbstractController
     public function getUser(): ?User
     {
 
-        $userId = $this->session->getUserId();
-        var_dump($userId);
+        $userId = ($this->session !== null) ? $this->session->getUserId() : 0;
         if (!$userId) {
             return null;
         }
