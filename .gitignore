@@ -1,0 +1,10 @@
+/vendor/nesbot/carbon/
+/vendor/phpmailer/phpmailer/
+/vendor/swiftmailer/swiftmailer/
+/vendor/bin/carbon
+/vendor/bin/carbon.bat
+/composer.lock
+/composer.phar
+/vendor/composer/installed.php
+/vendor/composer/InstalledVersions.php
+.idea

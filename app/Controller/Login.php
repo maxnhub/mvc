@@ -72,6 +72,7 @@ class Login extends AbstractController
         $user->save();
 
         $this->session->authUser($user->getId());
+//        header('Location: /blog');
         $this->redirect('/blog');
     }
 }

@@ -18,16 +18,11 @@ class User extends AbstractController
         $name = trim($_POST['name']);
         $password = $_POST['password'];
 
-//        $password2 = $_POST['password_2'];
-//        if(UserModel::getPasswordHash($password) == UserModel::getPasswordHash($password2)){
-//
-//        }
-
         $user = (new UserModel)->getByName($name, UserModel::getPasswordHash($password));
 
         if ($user) {
-            $_SESSION['id'] = $user->getId();
-            $this->redirect('/blog/index');
+            $this->session->authUser($user->getId());
+            $this->redirect('/');
         }
 
         $this->view->assign('error', 'Неверный логин и пароль');
@@ -71,7 +66,7 @@ class User extends AbstractController
                 $_SESSION['id'] = $user->getId();
                 $this->setUser($user);
 
-                $this->redirect('/blog/index');
+                $this->redirect('/');
             }
         }
 

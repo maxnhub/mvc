@@ -18,14 +18,19 @@ abstract class AbstractController
      */
     protected $user;
 
+    public function __construct()
+    {
+        $this->session = new Session();
+    }
+
     public function getUser(): ?User
     {
 
-        $userId = ($this->session !== null) ? $this->session->getUserId() : 0;
-        if (!$userId) {
+        if ($this->session === null) {
             return null;
         }
 
+        $userId = $this->session->getUserId();
         $user = User::getById($userId);
         if (!$user) {
             return null;
@@ -50,7 +55,8 @@ abstract class AbstractController
 
     protected function redirect(string $url)
     {
-        throw new RedirectException($url);
+        header('Location: ' . $url);
+        exit;
     }
 
     public function setView(View $view): void
@@ -61,11 +67,6 @@ abstract class AbstractController
     public function setUser(User $user): void
     {
         $this->user = $user;
-    }
-
-    public function preDispatch()
-    {
-
     }
 
 }

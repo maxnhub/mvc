@@ -35,9 +35,6 @@ class Application
 
             echo $content;
 
-        } catch (RedirectException $e) {
-            header('Location: ' . $e->getUrl());
-            die;
         } catch (RouteException $e) {
             header("HTTP/1.0 404 Not Found");
         }
@@ -54,19 +51,18 @@ class Application
 
     private function addRoutes()
     {
-//        /**
-//         * @uses \App\Controller\User::loginAction()
-//         */
+        /**
+         * @uses \App\Controller\User::loginAction()
+         */
         $this->route->addRoute('/user/login', User::class, 'login');
-//        /**
-//         * @uses \App\Controller\User::registerAction()
-//         */
-//        $this->route->addRoute('user/register', User::class, 'register');
-//        /**
-//         * @uses \App\Controller\Blog::indexAction()
-//         */
-//        $this->route->addRoute('blog', Blog::class, 'index');
-//        $this->route->addRoute('blog/index', Blog::class, 'index');
+        /**
+         * @uses \App\Controller\User::registerAction()
+         */
+        $this->route->addRoute('user/register', User::class, 'register');
+        /**
+         * @uses \App\Controller\Blog::indexAction()
+         */
+        $this->route->addRoute('/', Blog::class, 'index');
     }
 
     private function initController()
