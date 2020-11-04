@@ -63,6 +63,10 @@ class Application
          * @uses \App\Controller\Blog::indexAction()
          */
         $this->route->addRoute('/', Blog::class, 'index');
+        /**
+         * @uses \App\Controller\Blog::addMessage()
+         */
+        $this->route->addRoute('/blog/add-message', Blog::class, 'addMessage');
     }
 
     private function initController()
